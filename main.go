@@ -6,6 +6,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
+
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"
 	"github.com/joho/godotenv"
@@ -38,6 +40,9 @@ func main(){
 	apiCfg := apiConfig{
 		DB:queries,
 	}
+
+	go startScraping(queries, 10, time.Minute)
+
 	router := chi.NewRouter()
 
 	router.Use(cors.Handler(cors.Options{

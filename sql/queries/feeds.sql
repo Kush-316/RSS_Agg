@@ -5,3 +5,15 @@ RETURNING *;
 
 -- name: GetFeeds :many
 SELECT * FROM feeds;
+
+-- name: GetNextFeedsToFetch :many
+SELECT * from feeds
+order by last_fetched_at asc nulls first
+limit $1;
+
+-- name: MarkFeedsAsFetched :one
+update feeds
+set last_fetched_at = now(),
+updated_at = now()
+WHERE id = $1
+RETURNING *;
